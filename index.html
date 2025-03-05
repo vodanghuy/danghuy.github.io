@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Enhanced Portfolio</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-card">
+            <img src="" alt="Your Photo" id="profileImage" class="profile-image">
+            <h1 id="title">Welcome to My World</h1>
+            <p id="bioText">I'm [Your Name], a passionate individual creating my own story.</p>
+            
+            <div class="controls">
+                <input type="file" id="photoInput" accept="image/*">
+                <button class="btn" onclick="document.getElementById('photoInput').click()">Upload Profile</button>
+                <button class="btn" id="editBioBtn">Edit Bio</button>
+                <button class="btn" id="themeToggle">Toggle Theme</button>
+            </div>
+
+            <div id="bioEditor" style="display: none;">
+                <textarea id="bioInput" rows="4"></textarea>
+                <button class="btn" id="saveBio">Save Bio</button>
+            </div>
+
+            <div class="gallery-section">
+                <input type="file" id="galleryInput" accept="image/*" multiple>
+                <button class="btn" onclick="document.getElementById('galleryInput').click()">Add to Gallery</button>
+                <div class="gallery" id="gallery"></div>
+            </div>
+
+            <div class="social-links" id="socialLinks">
+                <a href="#" class="social-link">Twitter</a>
+                <a href="#" class="social-link">Instagram</a>
+                <a href="#" class="social-link">LinkedIn</a>
+            </div>
+            <button class="btn" id="editSocialBtn">Edit Social Links</button>
+            <div id="socialEditor" style="display: none;">
+                <input type="text" id="twitterInput" placeholder="Twitter URL">
+                <input type="text" id="instaInput" placeholder="Instagram URL">
+                <input type="text" id="linkedinInput" placeholder="LinkedIn URL">
+                <button class="btn" id="saveSocial">Save Links</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Profile Photo Upload
+        const photoInput = document.getElementById('photoInput');
+        const profileImage = document.getElementById('profileImage');
+        photoInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profileImage.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Bio Editor
+        const editBioBtn = document.getElementById('editBioBtn');
+        const bioEditor = document.getElementById('bioEditor');
+        const bioInput = document.getElementById('bioInput');
+        const saveBio = document.getElementById('saveBio');
+        const bioText = document.getElementById('bioText');
+
+        editBioBtn.addEventListener('click', () => {
+            bioInput.value = bioText.textContent;
+            bioEditor.style.display = 'block';
+            editBioBtn.style.display = 'none';
+        });
+
+        saveBio.addEventListener('click', () => {
+            bioText.textContent = bioInput.value;
+            bioEditor.style.display = 'none';
+            editBioBtn.style.display = 'inline-block';
+        });
+
+        // Theme Switcher
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+        });
+
+        // Gallery
+        const galleryInput = document.getElementById('galleryInput');
+        const gallery = document.getElementById('gallery');
+        galleryInput.addEventListener('change', function(e) {
+            const files = e.target.files;
+            for (let file of files) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.onclick = () => profileImage.src = img.src;
+                    gallery.appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Social Links Editor
+        const editSocialBtn = document.getElementById('editSocialBtn');
+        const socialEditor = document.getElementById('socialEditor');
+        const saveSocial = document.getElementById('saveSocial');
+        const socialLinks = document.getElementById('socialLinks');
+        const twitterInput = document.getElementById('twitterInput');
+        const instaInput = document.getElementById('instaInput');
+        const linkedinInput = document.getElementById('linkedinInput');
+
+        editSocialBtn.addEventListener('click', () => {
+            socialEditor.style.display = 'block';
+            editSocialBtn.style.display = 'none';
+        });
+
+        saveSocial.addEventListener('click', () => {
+            const links = socialLinks.getElementsByClassName('social-link');
+            if (twitterInput.value) links[0].href = twitterInput.value;
+            if (instaInput.value) links[1].href = instaInput.value;
+            if (linkedinInput.value) links[2].href = linkedinInput.value;
+            socialEditor.style.display = 'none';
+            editSocialBtn.style.display = 'inline-block';
+        });
+    </script>
+</body>
+</html>
